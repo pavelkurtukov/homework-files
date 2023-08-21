@@ -1,3 +1,5 @@
+package src;
+
 import java.io.*;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
@@ -70,7 +72,8 @@ public class Main {
         saveGameProcess(gameProgress3, fileSave3);
 
         // 2.3 Созданные файлы сохранений из папки savegames запаковать в архив zip
-        archiveDir(dirSave);
+        File path = new File("");
+        archiveDir(dirSave, path);
 
         // 2.4 Удалить файлы сохранений, лежащие вне архива
         cleanDir(dirSave);
@@ -128,7 +131,7 @@ public class Main {
     }
 
     // Архивирование всех файлов директории в каталог проекта
-    private static void archiveDir(File dir) {
+    private static void archiveDir(File dir, File path) {
         String archiveName = dir.getName() + ".zip";
         File fileArc = new File(archiveName);
 
@@ -156,5 +159,10 @@ public class Main {
             System.out.println(file.getAbsolutePath());
             file.delete();
         }
+    }
+
+    // Распаковка архива в заданный каталог
+    private static void openZip(File fileZip, File dirExtract) {
+
     }
 }
