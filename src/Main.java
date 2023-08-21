@@ -1,54 +1,47 @@
 package src;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Main {
     public static void main(String[] args) {
-        File dirRoot = new File("F://Games");
+        String fileTemp = "F://Games//temp//temp.txt";
+        String dirSave = "F://Games//savegames";
 
-        File dirSrc = new File(dirRoot, "src");
-        File dirRes = new File(dirRoot, "res");
-        File dirSave = new File(dirRoot, "savegames");
-        File dirTemp = new File(dirRoot, "temp");
+        ArrayList<String> dirList = new ArrayList<>();
+        ArrayList<String> fileList = new ArrayList<>();
 
-        File dirMain = new File(dirSrc, "main");
-        File dirTest = new File(dirSrc, "test");
+        dirList.add("F://Games//src");
+        dirList.add("F://Games//res");
+        dirList.add("F://Games//savegames");
+        dirList.add("F://Games//temp");
 
-        File fileMain = new File(dirMain, "Main.java");
-        File fileUtils = new File(dirMain, "Utils.java");
+        dirList.add("F://Games//src//main");
+        dirList.add("F://Games//src//test");
 
-        File dirDrawables = new File(dirRes, "drawables");
-        File dirVectors = new File(dirRes, "vectors");
-        File dirIcons = new File(dirRes, "icons");
+        dirList.add("F://Games//res//drawables");
+        dirList.add("F://Games//res//vectors");
+        dirList.add("F://Games//res//icons");
 
-        File fileTemp = new File(dirTemp, "temp.txt");
+        fileList.add("F://Games//src//main//Main.java");
+        fileList.add("F://Games//src//main//Utils.java");
+
+        fileList.add("F://Games//temp//temp.txt");
 
         StringBuilder installLog = new StringBuilder();
 
-        // 1.1 В папке Games создайте несколько директорий: src, res, savegames, temp.
-        createDir(dirSrc, installLog);
-        createDir(dirRes, installLog);
-        createDir(dirSave, installLog);
-        createDir(dirTemp, installLog);
+        // Создаём папки
+        for (String dir: dirList) {
+            createDir(dir, installLog);
+        }
 
-        // 1.2 В каталоге src создайте две директории: main, test
-        createDir(dirMain, installLog);
-        createDir(dirTest, installLog);
-
-        // 1.3 В подкаталоге main создайте два файла: Main.java, Utils.java
-        createFile(fileMain, installLog);
-        createFile(fileUtils, installLog);
-
-        // 1.4 В каталог res создайте три директории: drawables, vectors, icons
-        createDir(dirDrawables, installLog);
-        createDir(dirVectors, installLog);
-        createDir(dirIcons, installLog);
-
-        // 1.5 В директории temp создайте файл temp.txt
-        createFile(fileTemp, installLog);
+        // Создаём файлы
+        for (String file: fileList) {
+            createFile(file, installLog);
+        }
 
         // Сохраняем лог в файл temp.txt
         try (FileWriter fileWriter = new FileWriter(fileTemp)) {
@@ -62,9 +55,9 @@ public class Main {
         GameProgress gameProgress2 = new GameProgress(20, 15, 7, 3);
         GameProgress gameProgress3 = new GameProgress(100500, 333, 80, 100);
 
-        File fileSave1 = new File(dirSave, "save1.sav");
-        File fileSave2 = new File(dirSave, "save2.sav");
-        File fileSave3 = new File(dirSave, "save3.sav");
+        File fileSave1 = new File(dirSave + "/save1.sav");
+        File fileSave2 = new File(dirSave + "/save2.sav");
+        File fileSave3 = new File(dirSave + "/save3.sav");
 
         // 2.2 Сохранить сериализованные объекты GameProgress в папку savegames из предыдущей задачи
         saveGameProcess(gameProgress1, fileSave1);
@@ -80,10 +73,10 @@ public class Main {
     }
 
     // Создание директорий с сохранением лога
-    private static void createDir(File dir, StringBuilder log) {
-        String path = dir.getAbsolutePath();
+    private static void createDir(String dirAbsoluteName, StringBuilder log) {
+        File dir = new File(dirAbsoluteName);
 
-        log.append(path);
+        log.append(dirAbsoluteName);
 
         if (dir.mkdir()) {
             log.append(" успешно создана");
@@ -99,10 +92,10 @@ public class Main {
     }
 
     // Создание файлов с сохранением лога
-    private static void createFile(File file, StringBuilder log) {
-        String path = file.getAbsolutePath();
+    private static void createFile(String fileAbsoluteName, StringBuilder log) {
+        File file = new File(fileAbsoluteName);
 
-        log.append(path);
+        log.append(fileAbsoluteName);
 
         try {
             if (file.createNewFile()) {
@@ -131,7 +124,8 @@ public class Main {
     }
 
     // Архивирование всех файлов директории в каталог проекта
-    private static void archiveDir(File dir, File path) {
+    private static void archiveDir(String dirAbsoluteName, File path) {
+        File dir = new File(dirAbsoluteName);
         String archiveName = dir.getName() + ".zip";
         File fileArc = new File(archiveName);
 
@@ -154,9 +148,9 @@ public class Main {
     }
 
     // Очистка директории
-    private static void cleanDir(File dir) {
+    private static void cleanDir(String dirAbsoluteName) {
+        File dir = new File(dirAbsoluteName);
         for (File file: dir.listFiles()) {
-            System.out.println(file.getAbsolutePath());
             file.delete();
         }
     }
